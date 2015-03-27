@@ -36,6 +36,36 @@ class Board
   end
 end
 
-board = Board.new
-board.display
-puts board.mapping(3)
+class Player
+  attr_accessor :name, :symbol
+  def initialize(name = '', symbol = '')
+    @name = name
+    @symbol = symbol
+  end
+end
+
+class Game
+  attr_reader :player1, :player2, :board
+  def initialize
+    @board = Board.new
+    @player1 = Player.new
+    @player2 = Player.new
+  end
+  
+  def play
+    get_player_info
+    
+    puts player1.name
+    puts player1.symbol
+  end
+  
+  def get_player_info
+    print 'Player 1, please enter your name: '
+    player1.name = gets.chomp
+    print 'Player 1, please enter your symbol: '
+    player1.symbol = gets.chomp
+  end
+end
+
+game = Game.new
+game.play
