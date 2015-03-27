@@ -100,14 +100,26 @@ class Game
     
     current_player = player1
     other_player = player2
-    until board.game_over?
+    until board.game_over? || board.win?(other_player.symbol)
       name = current_player.name
       symbol = current_player.symbol
       board.display
       print "#{name}(#{symbol}), please make your move (#1-9): "
       cell = gets.chomp
-      board.set_cell(cell, symbol)
+      if !board.mapping(cell).nil?
+        puts 'Invalid move! Please try again.'
+        current_player, other_player = other_player, current_player
+      else
+        board.set_cell(cell, symbol)
+      end
       current_player, other_player = other_player, current_player
+    end
+
+    board.display
+    if board.win?(other_player.symbol)
+      puts "#{other_player.name} won!"
+    else
+      puts "It's a tie!"
     end
   end
   
