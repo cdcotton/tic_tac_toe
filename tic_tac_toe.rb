@@ -12,6 +12,26 @@ class Board
     grid[y][x]  
   end
   
+  def set_cell(cell, value)
+    x = to_coordinates(cell).fetch(:x)
+    y = to_coordinates(cell).fetch(:y)
+    grid[y][x] = value
+  end
+  
+  def to_coordinates(cell)
+    coords = {
+      '1' => {:x => 0, :y => 0},
+      '2' => {:x => 1, :y => 0},
+      '3' => {:x => 2, :y => 0},
+      '4' => {:x => 0, :y => 1},
+      '5' => {:x => 1, :y => 1},
+      '6' => {:x => 2, :y => 1},
+      '7' => {:x => 0, :y => 2},
+      '8' => {:x => 1, :y => 2},
+      '9' => {:x => 2, :y => 2}  
+    }
+    coords.fetch(cell)
+  end
   def mapping(cell)
     mapping = {
       '1' => get_cell(0,0),
@@ -78,7 +98,17 @@ class Game
   def play
     get_player_info
     
-    
+    current_player = player1
+    other_player = player2
+    until board.game_over?
+      name = current_player.name
+      symbol = current_player.symbol
+      board.display
+      print "#{name}(#{symbol}), please make your move (#1-9): "
+      cell = gets.chomp
+      board.set_cell(cell, symbol)
+      current_player, other_player = other_player, current_player
+    end
   end
   
   def get_player_info
