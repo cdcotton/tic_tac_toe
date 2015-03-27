@@ -3,9 +3,9 @@ class Board
   attr_accessor :grid
   
   def initialize
-    @grid = [[1, 2, 3],
-             [4, 5, 6],
-             [7, 8, 9]]    
+    @grid = [[nil, nil, nil],
+             [nil, nil, nil],
+             [nil, nil, nil]]    
   end
   
   def get_cell(x, y)
@@ -34,6 +34,29 @@ class Board
     puts " --+---+-- "
     puts " #{get_cell(0, 2)} | #{get_cell(1, 2)} | #{get_cell(2, 2)} "
   end
+
+  def win?(symbol)
+    # Checks rows and columns for wins.
+    for i in 0..2
+      win = grid[i].all? { |cell| cell == symbol }
+      return win if win
+      win = grid.transpose[i].all? { |cell| cell == symbol }
+      return win if win
+    end
+    
+    # Checks diagonals for wins.
+    [mapping(1), mapping(5), mapping(9)].all? { |cell| cell == symbol } \
+    || [mapping(3), mapping(5), mapping(7)].all? { |cell| cell == symbol }
+  end
+
+  def game_over?
+    for i in 0..2
+      for j in 0..2
+        return false if grid[i][j].nil?
+      end
+    end
+    true
+  end
 end
 
 class Player
@@ -55,8 +78,7 @@ class Game
   def play
     get_player_info
     
-    puts player1.name
-    puts player1.symbol
+    
   end
   
   def get_player_info
@@ -64,6 +86,11 @@ class Game
     player1.name = gets.chomp
     print 'Player 1, please enter your symbol: '
     player1.symbol = gets.chomp
+    
+    print 'Player 2, please enter your name: '
+    player2.name = gets.chomp
+    print 'Player 2, please enter your symbol: '
+    player2.symbol = gets.chomp
   end
 end
 
